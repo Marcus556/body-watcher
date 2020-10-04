@@ -1,3 +1,4 @@
+const { array } = require('@hapi/joi');
 const mongoose = require('mongoose');
 //users schema
 const userSchema = new mongoose.Schema({
@@ -20,8 +21,12 @@ const userSchema = new mongoose.Schema({
     max: 512
   },
   body: {
-    type: Object,
-    ref: 'body'
+    weights: {
+      type: Array,
+      default: [0]
+    }
+    // type: Object,
+    // ref: 'body'
   },
   date: {
     type: Date,

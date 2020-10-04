@@ -27,15 +27,14 @@ router.post('/register', async (req, res) => {
       email: email,
       password: hashedPassword,
       body: {
-        weight: body.weight,
-        waist: body.waist,
-        arms: body.arms
       }
     })
     //save the new user to database
     try {
       const savedUser = await user.save()
-      res.send(`user with id: '${savedUser._id}' created! ${savedUser.body.weight}`)
+      const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET_TOKEN);
+      res.header('auth-token', token).send(token)
+
 
       //catch error
     } catch (error) {
@@ -60,6 +59,8 @@ router.post('/login', async (req, res) => {
     //Create and assign jwt-token
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_TOKEN);
     res.header('auth-token', token).send(token)
+
+    console.log('logged in')
   } else {
     //validation dont pass:
     res.status(400).send(validation.error.details[0].message)
